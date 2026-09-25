@@ -13,6 +13,7 @@ const LINKS = [
   { href: "/email", icon: "email", label: "Email" },
   { href: "/linkedin", icon: "linkedin", label: "LinkedIn" },
   { href: "/replies", icon: "replies", label: "Replies" },
+  { href: "/comms", icon: "comms", label: "Comms" },
 ];
 
 const SYSTEM_LINKS = [{ href: "/system", icon: "system", label: "System" }];
