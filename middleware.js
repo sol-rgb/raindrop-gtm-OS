@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
 // process is serving and whether the database answers.
 export const config = {
   matcher: [
-    "/((?!api/login|api/healthz|api/clay|api/webhooks|login|_next/static|_next/image|favicon.ico|icon.svg|fonts/).*)",
+    "/((?!api/login|api/healthz|api/clay|api/webhooks|api/cron|login|_next/static|_next/image|favicon.ico|icon.svg|fonts/).*)",
   ],
 };
 

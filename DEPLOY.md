@@ -43,6 +43,14 @@ HEYREACH_API_KEY_MICHAEL
 Healthcheck path `/api/healthz`, which is outside the password gate on
 purpose.
 
+## 3b. The sync on Vercel (what is live today)
+
+The sync also runs inside the web app, so all secrets can live in Vercel
+alone: `/api/cron/sync` runs daily at 13:07 UTC through Vercel Cron
+(`vercel.json`), and **Sync now** on `/system` runs it on demand. Add
+`CRON_SECRET` in Vercel so the cron call is authenticated. On a Pro plan the
+schedule in `vercel.json` can be made hourly.
+
 ## 4. Clay and webhooks
 
 The `/system` page has the exact URL, header and body for the Clay HTTP

@@ -5,8 +5,11 @@ import { dataset } from "../../lib/model";
 import { cfg } from "../../lib/config";
 import { dbConfigured } from "../../lib/db";
 import { SIGNALS } from "../../lib/data/signals";
+import { syncNow } from "./actions";
 
 export const dynamic = "force-dynamic";
+// Sync now runs the whole pull inside this page's server action.
+export const maxDuration = 300;
 export const metadata = { title: "System | Raindrop GTM OS" };
 
 function ago(ts) {
@@ -52,7 +55,15 @@ export default async function SystemPage() {
     <>
       <SourceBanner ds={ds} />
       <Shell>
-        <PageHead title="System." sub="What feeds the OS, whether each piece is connected, and when it last answered." />
+        <PageHead title="System." sub="What feeds the OS, whether each piece is connected, and when it last answered.">
+          {dbConfigured() ? (
+            <form action={syncNow}>
+              <button type="submit" className="btn border border-strong bg-surface px-4 py-2 text-[13px] text-ink hover:border-accent">
+                Sync now
+              </button>
+            </form>
+          ) : null}
+        </PageHead>
 
         <Panel title="Sources" flush>
           <div className="scroll-box overflow-x-auto">
@@ -139,7 +150,7 @@ export default async function SystemPage() {
               ))}
             </div>
           ) : (
-            <p className="px-6 py-8 text-[13px] text-muted">No sync has run yet. The hourly GitHub Action starts once DATABASE_URL and the keys are in the repository secrets.</p>
+            <p className="px-6 py-8 text-[13px] text-muted">No sync has run yet. Press Sync now above, or wait for the daily run at 6am PT.</p>
           )}
         </Panel>
       </Shell>
