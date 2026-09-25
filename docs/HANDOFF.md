@@ -24,6 +24,8 @@ Replicate exactly the branding and design system of https://github.com/sol-rgb/r
 | HubSpot | Pending: Service Key via Gonz (read contacts, companies, deals) | HUBSPOT_SERVICE_KEY |
 | RB2B | Nothing needed, already feeds Clay | none |
 
+Network note (2026-09-25): the "Sol" environment created Sep 25 has the three keys set, but its network policy blocks api.instantly.ai and api.heyreach.io (proxy returns 403 on CONNECT). Add both hosts to the allowed domains before testing.
+
 ## Verified API facts
 - Instantly v2: GET /api/v2/campaigns/analytics, /analytics/daily, /analytics/overview, /analytics/steps; GET /api/v2/emails (20 req/min cap); lead lt_interest_status; webhooks on Hypergrowth+ (reply_received, lead_interested, ...). Scope all:read.
 - HeyReach: base https://api.heyreach.io/api/public, header X-API-KEY, 300 req/min. POST /stats/GetOverallStats (byDayStats), /stats/GetOverallStatsByCampaign, /campaign/GetAll, GetConversationsV3. Keys are per workspace; check whether both keys hit the same workspace.
