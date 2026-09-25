@@ -91,3 +91,7 @@ assert.equal(signalFor({ name: "Raindrop AI Wide Net - Grade A - Michael" }), "w
 assert.equal(signalFor({ name: "Raindrop AE Tier 1 Outbound" }), "ae-whitespace");
 assert.equal(signalFor({ name: "AE Tier 1 follow-ups" }), "ae-whitespace");
 console.log("adapter selftest ok");
+// Zubin's live LinkedIn names say "announce", not "launch" (docs/CAMPAIGNS.md).
+assert.equal(signalFor({ name: "AI 60-Day Announce - ZK Copy B" }), "agent-launch");
+assert.equal(signalFor({ name: "AI announcement in the last 60 days A version" }), "agent-launch");
+console.log("live-name selftest ok");
