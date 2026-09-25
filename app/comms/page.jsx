@@ -23,7 +23,7 @@ export default async function CommsPage({ searchParams }) {
   const days = SPANS.some((s) => s.key === sp.days) ? Number(sp.days) : 7;
   const ds = await dataset();
   const p = prepare(ds);
-  const { text } = buildUpdate(p, { days, hubspot: Boolean(cfg().hubspotKey) || ds.seed });
+  const { text } = buildUpdate(p, { days, hubspot: Boolean(cfg().hubspotKey) || ds.seed, acv: cfg().estimatedAcv });
 
   return (
     <>
