@@ -302,6 +302,55 @@ div.rows::-webkit-scrollbar-track,
   background: transparent;
 }
 
+/* A box cut at six rows says so. The bar is wider and always drawn, on a
+   visible track, because a hairline bar that only appears on hover reads as
+   "that is all there is". Styling the webkit scrollbar is also what keeps
+   macOS from hiding it until someone scrolls. */
+.is-capped {
+  scrollbar-width: auto;
+  scrollbar-color: #a9a79f var(--surface-2);
+}
+.is-capped::-webkit-scrollbar {
+  width: 12px;
+}
+.is-capped::-webkit-scrollbar-track {
+  background: var(--surface-2);
+  border-left: 1px solid var(--line);
+}
+.is-capped::-webkit-scrollbar-thumb {
+  background: #a9a79f;
+  border-radius: 999px;
+  border: 3px solid var(--surface-2);
+}
+.is-capped::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* The cue itself: a fade over the last row with "N more" and an arrow,
+   pinned to the bottom of the box while it scrolls. It clears once the last
+   row is in view, and never takes clicks from the row underneath. */
+.is-capped::after {
+  content: "\2193  " attr(data-more) " more";
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: 44px;
+  margin-top: -44px;
+  padding-top: 18px;
+  text-align: center;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff 65%);
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.is-capped.at-end::after {
+  opacity: 0;
+}
+
 /* Small mono link with a trailing arrow, as they set "View our Trust
    Center" in the security block. */
 .mono-link {

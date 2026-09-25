@@ -37,7 +37,23 @@ export default function RowScroll({ minRows = MIN_ROWS }) {
           el.style.maxHeight = "";
           el.style.overflowY = "";
         }
+        el.classList.remove("is-capped", "at-end");
+        delete el.dataset.more;
         return;
+      }
+
+      // Say that there is more. A hairline scrollbar on a calm page is easy
+      // to miss, so a capped box gets a visible bar and a "N more" cue that
+      // clears once you reach the last row.
+      const more = String(rows.length - minRows);
+      if (el.dataset.more !== more) el.dataset.more = more;
+      el.classList.add("is-capped");
+      if (!el.dataset.cueBound) {
+        el.dataset.cueBound = "1";
+        const atEnd = () =>
+          el.classList.toggle("at-end", el.scrollTop + el.clientHeight >= el.scrollHeight - 4);
+        el.addEventListener("scroll", atEnd, { passive: true });
+        requestAnimationFrame(atEnd);
       }
 
       const last = rows[minRows - 1];

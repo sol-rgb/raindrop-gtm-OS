@@ -3,6 +3,7 @@ import { dbConfigured, query } from "../../../../lib/db";
 import { secretOk, sha } from "../../../../lib/secret";
 import { heyreach } from "../../../../lib/adapters/heyreach";
 import { upsertThreads } from "../../../../lib/sync/run";
+import { datasetChanged } from "../../../../lib/freshness";
 import { daysAgo } from "../../../../lib/adapters/http";
 
 // HeyReach posts here on EVERY_MESSAGE_REPLY_RECEIVED, one webhook per
@@ -43,5 +44,6 @@ export async function POST(req) {
       console.error("[webhook heyreach]", e.message);
     }
   }
+  datasetChanged();
   return Response.json({ ok: true });
 }

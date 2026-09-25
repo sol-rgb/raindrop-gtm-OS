@@ -2,6 +2,7 @@ import { cfg } from "../../../lib/config";
 import { dbConfigured, query } from "../../../lib/db";
 import { secretOk } from "../../../lib/secret";
 import { SIGNALS } from "../../../lib/data/signals";
+import { datasetChanged } from "../../../lib/freshness";
 
 // Where Clay's HTTP column sends each qualified row. One row per lead; a
 // re-send of the same row updates it rather than counting it twice, so a
@@ -56,5 +57,6 @@ export async function POST(req) {
     saved++;
   }
 
+  if (saved) datasetChanged();
   return Response.json({ ok: rejected.length === 0, saved, rejected }, { status: rejected.length && !saved ? 400 : 200 });
 }

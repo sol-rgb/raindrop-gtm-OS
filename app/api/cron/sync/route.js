@@ -2,6 +2,7 @@ import { cfg } from "../../../../lib/config";
 import { dbConfigured } from "../../../../lib/db";
 import { secretOk } from "../../../../lib/secret";
 import { runSync } from "../../../../lib/sync/run";
+import { datasetChanged } from "../../../../lib/freshness";
 
 // The sync, run inside the web app on Vercel, so every secret lives in one
 // place. Vercel Cron calls it with "Authorization: Bearer <CRON_SECRET>";
@@ -22,5 +23,6 @@ export async function GET(req) {
 
   const lines = [];
   const out = await runSync({ trigger: bearer ? "vercel-cron" : "api", log: (l) => lines.push(l) });
+  datasetChanged();
   return Response.json({ ...out, log: lines }, { status: out.ok ? 200 : 500 });
 }

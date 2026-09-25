@@ -3,6 +3,7 @@ import { dbConfigured, query } from "../../../../lib/db";
 import { secretOk, sha } from "../../../../lib/secret";
 import { instantly, threadsFromEmails } from "../../../../lib/adapters/instantly";
 import { upsertThreads } from "../../../../lib/sync/run";
+import { datasetChanged } from "../../../../lib/freshness";
 
 // Instantly posts here on reply_received (Hypergrowth and above). The event
 // is recorded once, then the lead's own emails are re-read so the queue shows
@@ -43,5 +44,6 @@ export async function POST(req) {
       console.error("[webhook instantly]", e.message);
     }
   }
+  datasetChanged();
   return Response.json({ ok: true });
 }

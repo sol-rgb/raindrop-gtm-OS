@@ -20,6 +20,9 @@ export function Tab({ on, href: to, children }) {
     <Link
       href={to}
       scroll={false}
+      // Fully prefetched: the data is cached, so rendering every filter
+      // view ahead of the click is cheap, and the click is then instant.
+      prefetch={true}
       className={`btn rounded-full border px-4 py-1.5 text-[13px] ${
         on ? "border-strong bg-surface text-ink" : "border-hair bg-transparent text-muted hover:text-ink"
       }`}
