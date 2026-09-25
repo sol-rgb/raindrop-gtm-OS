@@ -1,0 +1,22 @@
+# Apply any new migrations against production. Separate from the sync on
+# purpose: a schema change is a decision somebody makes, not a side effect of
+# a cron tick.
+name: Apply migrations
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

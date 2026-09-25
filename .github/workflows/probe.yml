@@ -1,0 +1,24 @@
+# Read-only check of every key: lists what Instantly and HeyReach can see and
+# which signal each campaign would be filed under. Writes nothing anywhere.
+name: Probe keys
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run probe
+        env:
+          INSTANTLY_API_KEY: ${{ secrets.INSTANTLY_API_KEY }}
+          HEYREACH_API_KEY_ZUBIN: ${{ secrets.HEYREACH_API_KEY_ZUBIN }}
+          HEYREACH_API_KEY_MICHAEL: ${{ secrets.HEYREACH_API_KEY_MICHAEL }}
+          HUBSPOT_SERVICE_KEY: ${{ secrets.HUBSPOT_SERVICE_KEY }}

@@ -1,0 +1,8 @@
+node_modules
+.next
+out
+.DS_Store
+.env*
+# The example is the config contract, so it is the one .env file that ships.
+!.env.example
+.vercel

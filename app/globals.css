@@ -1,0 +1,370 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Raindrop's display face, served the same way they serve it. */
+@font-face {
+  font-family: "AlphaLyrae";
+  src: url("/fonts/AlphaLyrae-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: optional;
+}
+
+/* Tokens lifted from raindrop.ai's light theme, which is what the product
+   itself runs. The ink is their dark blue-green, not black, and the page is
+   a warm off-white rather than pure white. */
+:root {
+  --bg: #fcfbf9;
+  --surface: #ffffff;
+  --surface-2: #f4f3ef;
+  /* Table and panel headers. Lighter than surface-2, which is a bar track
+     and a hover state, and still a step darker than the page behind it. */
+  --head: #f8f7f3;
+  --rail: #faf9f6;
+
+  --ink: #18211f;
+  --text: #4a524e;
+  --muted: #68706b;
+  --faint: #8b918c;
+
+  --line: #1918141f;
+  --line-strong: #00000026;
+
+  --accent: #4b7d88;
+  --accent-soft: #deedf0;
+
+  --rail-w: 184px;
+
+  /* Depth.
+     Raindrop's own surfaces are flat, so these are deliberately quiet: the
+     shadow is warm rather than grey, because a neutral grey drop shadow on a
+     warm off-white page reads as dirt. Rest is barely there and only exists
+     so the hover state has somewhere to travel from. */
+  --shadow-rest: 0 1px 2px rgba(24, 33, 31, 0.04);
+  --shadow-hover: 0 4px 14px rgba(24, 33, 31, 0.09), 0 1px 3px rgba(24, 33, 31, 0.05);
+  --shadow-press: 0 1px 1px rgba(24, 33, 31, 0.06);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 80px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img,
+svg {
+  display: block;
+}
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+/* Their headline treatment: AlphaLyrae, sentence case, a full stop at the
+   end of the thought. */
+.display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.14;
+}
+
+/* The card. On their product these are white on the warm page colour with a
+   single hairline and no shadow. */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+/* ---------------------------------------------------------------------------
+   What is clickable.
+
+   Everything in this app is hairlines on off-white, which is calm and gives
+   no clue which rectangles do something when you press them. These two
+   classes are the whole answer: anything you can click lifts a little and
+   picks up a shadow under the cursor, and pushes back down when pressed.
+   Nothing that is merely information ever moves.
+   --------------------------------------------------------------------------- */
+
+.lift {
+  /* position and z-index, so a hovered card paints above its neighbours.
+     Without them a lifted row slides under the next one, and a tooltip
+     opened inside a row is covered by every row after it.
+
+     There is deliberately no will-change here. It looks like a free
+     performance hint and it is not: it promotes the element to its own
+     stacking context, which traps any z-index used inside the card. That is
+     what made the hover notes on /system render behind the next row's
+     heading. These transforms are two pixels on a hairline card and need no
+     help from the compositor. */
+  position: relative;
+  z-index: 0;
+  box-shadow: var(--shadow-rest);
+  transition:
+    transform 0.14s cubic-bezier(0.2, 0, 0.13, 1),
+    box-shadow 0.14s cubic-bezier(0.2, 0, 0.13, 1),
+    border-color 0.14s ease,
+    background-color 0.14s ease;
+}
+.lift:hover,
+.lift:focus-within {
+  z-index: 20;
+}
+.lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--line-strong);
+}
+.lift:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-press);
+}
+.lift:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-hover), 0 0 0 3px var(--accent-soft);
+}
+
+/* The same idea at button scale. Shorter travel, because a control that
+   jumps as far as a card feels loose. */
+.btn {
+  box-shadow: var(--shadow-rest);
+  transition:
+    transform 0.12s cubic-bezier(0.2, 0, 0.13, 1),
+    box-shadow 0.12s cubic-bezier(0.2, 0, 0.13, 1),
+    border-color 0.12s ease,
+    background-color 0.12s ease,
+    opacity 0.12s ease;
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-press);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-hover), 0 0 0 3px var(--accent-soft);
+}
+.btn:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* A table row that is a link. It cannot translate without shearing the table,
+   so it gets the colour change and the shadow and stays put. */
+.lift-row {
+  transition: background-color 0.12s ease, box-shadow 0.14s ease;
+}
+.lift-row:hover {
+  background: var(--surface);
+  box-shadow: var(--shadow-hover);
+}
+
+/* The anchor a hover note hangs from. It has to outrank whatever comes after
+   it in the document, because the note is absolutely positioned inside it and
+   siblings later in the source paint on top by default. */
+.note-anchor {
+  position: relative;
+  z-index: 0;
+}
+.note-anchor:hover,
+.note-anchor:focus-within {
+  z-index: 60;
+}
+
+/* The dashed underline that means "there is more here, hover it". Used on
+   headings whose explanation has been moved off the page. */
+.has-note {
+  border-bottom: 1px dashed var(--line-strong);
+  cursor: help;
+}
+.has-note:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   One type hierarchy, for the whole OS.
+
+   The problem this fixes: a section heading set at 16px in muted grey, sitting
+   above body copy at 13px in the same weight, does not read as a heading. The
+   eye finds no edge and the page becomes one undifferentiated column of text.
+
+   So a title beats its body on all three axes at once, never just one: bigger,
+   heavier, and darker. Body is the only thing allowed to be grey.
+   --------------------------------------------------------------------------- */
+
+/* A section inside a page. Disclosure rows, list-section headings. */
+.h-sub {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+/* The label on a record field, or the name on a list row. Smaller than a
+   section heading and heavier, because it is competing with a value set
+   right underneath it rather than with a paragraph. */
+.h-field {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* The name on a row in a list of people or sources. */
+.h-row {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Everything that is not a title. Grey, lighter, smaller. */
+.body-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* A row list divided by hairlines rather than boxed per item. */
+.rows > * + * {
+  border-top: 1px solid var(--line);
+}
+
+/* Six rows, then scroll. The height itself is measured from the rows by
+   components/RowScroll.jsx, because "six rows" is not a length: a row in the
+   candidates table is 52px and a row in the pipeline strip is 143px, and a
+   fixed max-height that fits six of one fits two of the other.
+   position: relative makes each box the offsetParent for its own rows, so
+   the measurement is a plain offsetTop and a sticky header does not skew it.
+   .rows-open opts a list out. overflow clips whether or not it is scrolling,
+   and those lists open hover notes positioned outside their row. */
+div.rows:not(.rows-open),
+.scroll-box {
+  position: relative;
+  overscroll-behavior: contain;
+}
+
+/* Scrolling past row six should not leave a column of numbers with nothing
+   saying what they are. The header carries its own fill, so it stays opaque
+   over the rows passing under it. */
+.scroll-box thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Quiet scrollbars. A default chrome scrollbar inside a card is the loudest
+   thing on the page. */
+div.rows::-webkit-scrollbar,
+.scroll-box::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+div.rows::-webkit-scrollbar-thumb,
+.scroll-box::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 4px;
+}
+div.rows::-webkit-scrollbar-track,
+.scroll-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Small mono link with a trailing arrow, as they set "View our Trust
+   Center" in the security block. */
+.mono-link {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--line-strong);
+  transition: text-decoration-color 0.12s ease, color 0.12s ease;
+}
+.mono-link:hover {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+}
+
+/* The hairline mono badge. Their "Series A" pill.
+   Sentence case, never capitals: Raindrop sets these in sentence case and
+   capitals read as shouting in an interface somebody has open all day. The
+   tracking comes down with it, because spacing that looks deliberate on
+   capitals looks like a rendering fault on lowercase. */
+.badge {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--line-strong);
+  padding: 2px 6px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d8d6d0;
+    border-radius: 999px;
+    border: 3px solid var(--bg);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* The shadow still does its job without the travel, so keep the signal and
+     drop the movement rather than dropping both. */
+  .lift:hover,
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+}

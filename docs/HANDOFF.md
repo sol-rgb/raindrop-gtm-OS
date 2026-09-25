@@ -30,7 +30,15 @@ Replicate exactly the branding and design system of https://github.com/sol-rgb/r
 - Clay: no need for read API; add an HTTP API column (1 Action per row, "Only run if") posting each lead to our endpoint.
 - HubSpot: Service Key (legacy private apps sunset Oct 26, 2026). Meetings read with crm.objects.contacts.read. hs_meeting_outcome for held vs booked. Add custom "Source signal" dropdown on Contact and Deal.
 
+## Build status
+The app is built (see README.md): Pipeline, Signals, Email, LinkedIn, Replies,
+System, on seed data until a database is connected. Sync worker, Clay ingest
+endpoint and reply webhooks are written against the verified API shapes.
+`npm run probe` checks the keys read-only; `npm run selftest` checks the math.
+Clay workspace map: docs/CLAY.md.
+
 ## Next steps
-1. Test each key read-only; list all Instantly and HeyReach campaigns; draft signal to campaign mapping.
-2. Decide Supabase project (recommendation: new, separate from Raindrop OS).
-3. Scaffold app from raindrop-OS stack and design; build Pipeline and Signals on real data.
+1. Run `npm run probe` with the keys; rename or map any Unmapped campaign.
+2. Create a new Supabase project; follow DEPLOY.md.
+3. HubSpot Service Key from Gonz, plus the Source signal property.
+4. Confirm the Clay map with Pranav; add the HTTP columns.
