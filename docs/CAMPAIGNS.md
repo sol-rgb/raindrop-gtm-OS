@@ -26,9 +26,9 @@ Instantly names that contain a long dash are shown here with a plain hyphen.
 | Instantly | Inbox pool | Braintrust Followers | draft | 0 | 0 | Competitor stack |
 | Instantly | Inbox pool | Langfuse Followers | draft | 0 | 0 | Competitor stack |
 | Instantly | Inbox pool | Website Visitors - Email 1 (approved) | draft | 0 | 0 | Website visitors |
-| Instantly | Inbox pool | Wide Net (YC US/CA) - 4-angle split test | draft | 0 | 0 | Wide net |
+| Instantly | Inbox pool | Wide Net (YC US/CA) - 4-angle split test | draft | 0 | 0 | YC |
 | Instantly | Inbox pool | Wide Net (US .ai) - 4-angle split test | draft | 0 | 0 | Wide net |
-| Instantly | Inbox pool | Hiring Signal (YC US/CA) - AI devs, 2-angle split | draft | 0 | 0 | Hiring |
+| Instantly | Inbox pool | Hiring Signal (YC US/CA) - AI devs, 2-angle split | draft | 0 | 0 | YC |
 | Instantly | Inbox pool | Raindrop - MISFITS PARKED, do not send (2026-09-25) | draft | 0 | 0 | **Unmapped** |
 | HeyReach | Michael | Raindrop AI Wide Net - Grade A - Michael | paused | 68 | 2 | Wide net |
 | HeyReach | Michael | Raindrop AE Tier 1 Outbound | finished | 39 | 0 | AE whitespace T1 |
@@ -79,6 +79,8 @@ The pattern for New agent launch is `launch|new agent`, and these say
 | AI announcement in the last 60 days B version | New agent launch · LinkedIn (B) |
 | AI Announcement in the last 60 days | New agent launch · LinkedIn |
 
+Together with the 60-day A/B pair, these look like the "Linkedin Campaign 24.08, last 60 days trigger" Clay workbook that `signals.js` ties to this signal.
+
 Alternative to renaming five campaigns: add `announce` to the New agent
 launch pattern in `lib/data/signals.js`. Not done here, pending a yes.
 
@@ -86,7 +88,7 @@ launch pattern in `lib/data/signals.js`. Not done here, pending a yes.
 
 | Campaign | What it looks like | Suggested name |
 |---|---|---|
-| Zubin Outbound Updated Final | 48 requests, close to the 50-company LinkedIn batch that `signals.js` already notes looks like New agent launch | New agent launch · LinkedIn, if confirmed |
+| Zubin Outbound Updated Final | 48 requests, the oldest Zubin campaign, no signal in the name and no replies | Rename once Zubin confirms the list, e.g. Wide net · LinkedIn or New agent launch · LinkedIn |
 | Accepted Not Messaged - Follow Up | Follow-up to people who accepted in other campaigns. 9 replies with no new requests, so the replies belong to whichever campaign sourced the lead | Map in `signal_map` to the parent signal (likely New agent launch), or leave Unmapped |
 | Follow-up campaign for non-DMs sent | Draft follow-up, same question as above | Same as above |
 | CEO Copy (ZK) - Draft | Draft copy test, no sends | Rename once the target signal is known, e.g. New agent launch · LinkedIn (CEO copy) |
@@ -98,6 +100,8 @@ launch pattern in `lib/data/signals.js`. Not done here, pending a yes.
 | CAT/CARRARA: Hiring outbound | Hiring | "Hiring" in the name could mean recruiting (Carrara) rather than the Hiring sales signal. The plan also runs Hiring by email only | If it is sales outreach to companies with open roles: Hiring · LinkedIn. If it is recruiting: move it out of the GTM view with `signal_map` or rename so it matches nothing |
 | New Agent Launch (Named Agent) - .ai wide net split | New agent launch | The list is the .ai wide net list, not launch-gated. The first matching pattern wins, so "launch" beats "wide net" | Wide net · Email (named agent) if it is not gated on launch news, otherwise New agent launch · Email |
 | Website Visitors - Email 1 (approved) | Website visitors | Mapping is right, but the plan runs this signal on LinkedIn only | Keep as Website visitors · Email and update the plan, or move it to HeyReach |
+| Wide Net (YC US/CA) - 4-angle split test | YC | The new YC signal (added in `signals.js` today) sits above Wide net, so the YC list wins | Fine if YC is meant to be its own signal: YC · Email (4-angle). If it should count as Wide net: Wide net · Email (YC US/CA) will still hit YC, so map it in `signal_map` |
+| Hiring Signal (YC US/CA) - AI devs, 2-angle split | YC | Same order issue: YC sits above Hiring, so a hiring-gated send to YC companies files under YC | If the trigger is the job post, map it to Hiring in `signal_map` (any name with "YC" in it will match YC first) |
 | Raindrop AI Wide Net - Grade A - Michael | Wide net | Mapping is right. The plan lists Zubin as the Wide net sender, this one runs from Michael | No rename needed: Wide net · LinkedIn (Michael) if you want the convention |
 
 ### Tests and parked lists (fine as Unmapped)
