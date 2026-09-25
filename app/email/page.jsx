@@ -48,8 +48,9 @@ export default async function EmailPage({ searchParams }) {
           {stats.map(([label, v, sub, tone]) => (
             <div key={label} className="border-b border-r border-hair p-6">
               <div className="text-[15px] text-ink">{label}</div>
-              <div className={`display mt-5 text-[30px] leading-none ${tone === "warn" ? "text-warn" : "text-ink"}`}>{v}</div>
-              <div className="mt-3 font-mono text-[11px] text-faint">{sub}</div>
+              <div className={`display mt-5 text-[30px] leading-none ${tone === "warn" ? "text-warn" : "text-ink"}`}>
+                <Note text={sub} width={220}>{v}</Note>
+              </div>
             </div>
           ))}
         </div>
@@ -89,7 +90,7 @@ export default async function EmailPage({ searchParams }) {
         </Panel>
 
         <Panel className="mt-12 mb-32" title="Campaigns" flush>
-          <div className="scroll-box overflow-x-auto">
+          <div className="scroll-box overflow-x-auto lg:overflow-visible">
             <table className="w-full min-w-[860px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">

@@ -52,8 +52,9 @@ export default async function RepliesPage({ searchParams }) {
           ].map(([label, v, sub, tone]) => (
             <div key={label} className="border-b border-r border-hair p-6">
               <div className="text-[15px] text-ink">{label}</div>
-              <div className={`display mt-5 text-[30px] leading-none ${tone}`}>{v}</div>
-              <div className="mt-3 font-mono text-[11px] text-faint">{sub}</div>
+              <div className={`display mt-5 text-[30px] leading-none ${tone}`}>
+                <Note text={sub} width={220}>{v}</Note>
+              </div>
             </div>
           ))}
         </div>
@@ -73,7 +74,7 @@ export default async function RepliesPage({ searchParams }) {
           flush
         >
           {waiting.length ? (
-            <div className="scroll-box overflow-x-auto">
+            <div className="scroll-box overflow-x-auto lg:overflow-visible">
               <table className="w-full min-w-[980px] border-collapse">
                 <thead>
                   <tr className="border-b border-hair">
@@ -92,10 +93,9 @@ export default async function RepliesPage({ searchParams }) {
                       <Td>
                         <span className="flex items-center gap-2">
                           <span className="h-2 w-2 shrink-0 rounded-[2px]" style={{ background: CHANNELS[t.channel].color }} title={CHANNELS[t.channel].label} />
-                          <span className="h-row">{t.leadName ?? "Unknown"}</span>
-                        </span>
-                        <span className="mt-0.5 block pl-4 text-[11.5px] text-faint">
-                          {t.leadCompany ?? ""} · {CHANNELS[t.channel].label}
+                          <Note text={[t.leadCompany, CHANNELS[t.channel].label].filter(Boolean).join(" · ")} width={200}>
+                            <span className="h-row">{t.leadName ?? "Unknown"}</span>
+                          </Note>
                         </span>
                       </Td>
                       <Td>

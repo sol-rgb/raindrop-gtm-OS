@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Shell, PageHead, Panel, Th, Td, Badge, MonoLink } from "../../../components/UI";
+import { Shell, PageHead, Panel, Th, Td, Badge, MonoLink, Note } from "../../../components/UI";
 import Controls, { readControls } from "../../../components/Controls";
 import SourceBanner from "../../../components/SourceBanner";
 import Funnel from "../../../components/Funnel";
@@ -62,8 +62,9 @@ export default async function SignalPage({ params, searchParams }) {
           extra={
             <div className="border-b border-r border-hair bg-head p-5">
               <div className="text-[14px] leading-tight text-ink">Pipeline created</div>
-              <div className="display mt-5 text-[28px] leading-none text-accent">{money(pipelineValue(f, cfg().estimatedAcv))}</div>
-              <div className="mt-[30px] font-mono text-[11px] text-faint">{f.qualified} qualified</div>
+              <div className="display mt-5 text-[28px] leading-none text-accent">
+                <Note text={`${f.qualified} qualified.`} width={160}>{money(pipelineValue(f, cfg().estimatedAcv))}</Note>
+              </div>
             </div>
           }
         />
@@ -100,7 +101,7 @@ export default async function SignalPage({ params, searchParams }) {
 
         <Panel className="mt-16 mb-32" title="Campaigns" flush>
           {camps.length ? (
-            <div className="scroll-box overflow-x-auto">
+            <div className="scroll-box overflow-x-auto lg:overflow-visible">
               <table className="w-full min-w-[760px] border-collapse">
                 <thead>
                   <tr className="border-b border-hair">
@@ -118,11 +119,9 @@ export default async function SignalPage({ params, searchParams }) {
                       <Td>
                         <span className="flex items-center gap-2 text-ink">
                           <span className="h-2 w-2 rounded-[2px]" style={{ background: CHANNELS[c.channel].color }} />
-                          {c.name}
-                        </span>
-                        <span className="mt-0.5 block text-[11px] text-faint">
-                          {CHANNELS[c.channel].tool}
-                          {c.sender ? ` · ${c.sender}` : ""}
+                          <Note text={`${CHANNELS[c.channel].tool}${c.sender ? ` · ${c.sender}` : ""}`} width={180}>
+                            {c.name}
+                          </Note>
                         </span>
                       </Td>
                       <Td><Badge tone={c.status === "active" || c.status === "in progress" ? "good" : "default"}>{c.status}</Badge></Td>

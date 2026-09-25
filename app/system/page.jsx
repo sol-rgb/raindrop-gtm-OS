@@ -66,7 +66,7 @@ export default async function SystemPage() {
         </PageHead>
 
         <Panel title="Sources" flush>
-          <div className="scroll-box overflow-x-auto">
+          <div className="scroll-box overflow-x-auto lg:overflow-visible">
             <table className="w-full min-w-[820px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">

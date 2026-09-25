@@ -38,7 +38,7 @@ export default async function LinkedInPage({ searchParams }) {
         </PageHead>
 
         <Panel title="By sender" flush>
-          <div className="scroll-box overflow-x-auto">
+          <div className="scroll-box overflow-x-auto lg:overflow-visible">
             <table className="w-full min-w-[760px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">
@@ -108,7 +108,7 @@ export default async function LinkedInPage({ searchParams }) {
         </Panel>
 
         <Panel className="mt-12 mb-32" title="Campaigns" flush>
-          <div className="scroll-box overflow-x-auto">
+          <div className="scroll-box overflow-x-auto lg:overflow-visible">
             <table className="w-full min-w-[860px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">
@@ -126,8 +126,9 @@ export default async function LinkedInPage({ searchParams }) {
                 {camps.map((c) => (
                   <tr key={c.id} className="border-b border-hair">
                     <Td>
-                      <span className="text-ink">{c.name}</span>
-                      <span className="mt-0.5 block text-[11px] text-faint">{c.sender}</span>
+                      <Note text={`Sent from ${c.sender ?? "an unknown"} profile.`} width={200}>
+                        <span className="text-ink">{c.name}</span>
+                      </Note>
                     </Td>
                     <Td>
                       {c.signal === "unmapped" ? (

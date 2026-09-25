@@ -39,35 +39,38 @@ export default async function SignalsPage({ searchParams }) {
         <div className="mb-32 space-y-12">
           {groups.map((g) => (
             <Panel key={g.key} title={g.label} flush>
-              <div className="scroll-box overflow-x-auto">
+              {/* Scrolls sideways only on small screens. On desktop the table
+                  fits, and leaving overflow visible lets the hover notes on
+                  the names show in full instead of being clipped. */}
+              <div className="overflow-x-auto lg:overflow-visible">
                 <table className="w-full min-w-[980px] table-fixed border-collapse">
                   {/* Fixed widths, so the columns line up from one tier's
                       table to the next and the page reads as one table. */}
                   <colgroup>
-                    <col style={{ width: "18%" }} />
+                    <col style={{ width: "15%" }} />
                     <col style={{ width: "10%" }} />
                     {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                      <col key={i} style={{ width: "6.8%" }} />
+                      <col key={i} style={{ width: "7.4%" }} />
                     ))}
                     <col style={{ width: "10%" }} />
-                    <col style={{ width: "14.4%" }} />
+                    <col style={{ width: "13.2%" }} />
                   </colgroup>
                   <thead>
                     <tr className="border-b border-hair">
                       <Th>Signal</Th>
                       <Th>Channel</Th>
-                      <Th align="center">Entered</Th>
-                      <Th align="center">Contacted</Th>
-                      <Th align="center">Replied</Th>
-                      <Th align="center">Positive</Th>
-                      <Th align="center">Booked</Th>
-                      <Th align="center">Held</Th>
-                      <Th align="center">
+                      <Th align="center" className="!px-1.5">Entered</Th>
+                      <Th align="center" className="!px-1.5">Contacted</Th>
+                      <Th align="center" className="!px-1.5">Replied</Th>
+                      <Th align="center" className="!px-1.5">Positive</Th>
+                      <Th align="center" className="!px-1.5">Booked</Th>
+                      <Th align="center" className="!px-1.5">Held</Th>
+                      <Th align="center" className="!px-1.5">
                         <Note text="Meetings booked per 1,000 contacted. Plan 2.4 to 4.8." width={220} align="right">
                           Per 1,000
                         </Note>
                       </Th>
-                      <Th align="center">
+                      <Th align="center" className="!px-1.5">
                         <Note text="Meetings held a week in this window, against what the plan expects a week. One-off lists carry a total instead." width={260} align="right">
                           Held a week
                         </Note>
@@ -82,16 +85,21 @@ export default async function SignalsPage({ searchParams }) {
                         <tr key={r.key} className="lift-row border-b border-hair">
                           <Td>
                             <Link href={`/signals/${r.key}?range=${range}`} className="block">
-                              <span className="flex flex-wrap items-center gap-2">
+                              {/* Just the name. Status, campaigns and sender
+                                  come out on hover, so the table reads as
+                                  numbers first. */}
+                              <Note
+                                width={240}
+                                text={[
+                                  r.status.label,
+                                  r.campaigns.length
+                                    ? `${r.campaigns.length} campaign${r.campaigns.length > 1 ? "s" : ""}`
+                                    : "No campaign yet",
+                                  r.sender,
+                                ].filter(Boolean).join(" · ")}
+                              >
                                 <span className="h-row">{r.name}</span>
-                                <Badge tone={r.status.tone}>{r.status.label}</Badge>
-                              </span>
-                              <span className="mt-0.5 block max-w-[260px] truncate text-[11.5px] text-faint">
-                                {r.campaigns.length
-                                  ? `${r.campaigns.length} campaign${r.campaigns.length > 1 ? "s" : ""}`
-                                  : "No campaign yet"}
-                                {r.sender ? ` · ${r.sender}` : ""}
-                              </span>
+                              </Note>
                             </Link>
                           </Td>
                           <Td>
@@ -107,8 +115,13 @@ export default async function SignalsPage({ searchParams }) {
                           <Td align="center" className="text-text">{fmt(r.funnel.entered)}</Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.contacted)}</Td>
                           <Td align="center" className="text-text">
-                            {fmt(r.funnel.replied)}
-                            <span className="block text-[11px] text-faint">{pct(rate(r.funnel.replied, r.funnel.contacted), 1)}</span>
+                            {r.funnel.contacted ? (
+                              <Note text={`${pct(rate(r.funnel.replied, r.funnel.contacted), 1)} of contacted`} width={160}>
+                                {fmt(r.funnel.replied)}
+                              </Note>
+                            ) : (
+                              fmt(r.funnel.replied)
+                            )}
                           </Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.positive)}</Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.booked)}</Td>

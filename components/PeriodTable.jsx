@@ -1,11 +1,11 @@
-import { Th, Td } from "./UI";
+import { Th, Td, Note } from "./UI";
 
 // The same numbers as the charts above it, as a table: for anyone who
 // cannot tell the bars apart, and for anyone pasting a week into the
 // Monday update.
 export default function PeriodTable({ rows, cols }) {
   return (
-    <div className="scroll-box overflow-x-auto">
+    <div className="scroll-box overflow-x-auto lg:overflow-visible">
       <table className="w-full min-w-[620px] border-collapse">
         <thead>
           <tr className="border-b border-hair">
@@ -19,8 +19,7 @@ export default function PeriodTable({ rows, cols }) {
           {[...rows].reverse().map((r) => (
             <tr key={r.from} className="border-b border-hair">
               <Td className="text-ink">
-                {r.label}
-                {r.sub ? <span className="ml-2 text-[11px] text-faint">{r.sub}</span> : null}
+                {r.sub ? <Note text={`Week of ${r.sub}`} width={150}>{r.label}</Note> : r.label}
               </Td>
               {cols.map((c) => (
                 <Td key={c.label} align="center" className="text-text">{c.value(r)}</Td>

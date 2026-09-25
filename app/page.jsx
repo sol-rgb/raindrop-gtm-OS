@@ -57,10 +57,13 @@ export default async function PipelinePage({ searchParams }) {
                   Pipeline created
                 </Note>
               </div>
-              <div className="display mt-5 text-[28px] leading-none text-accent">{money(value)}</div>
-              <div className="mt-[30px] font-mono text-[11px] text-faint">
-                {f.qualified} qualified
-                {f.qualifiedWithAmount < f.qualified ? `, ${f.qualified - f.qualifiedWithAmount} at est. ACV` : ""}
+              <div className="display mt-5 text-[28px] leading-none text-accent">
+                <Note
+                  width={220}
+                  text={`${f.qualified} qualified${f.qualifiedWithAmount < f.qualified ? `, ${f.qualified - f.qualifiedWithAmount} at estimated ACV` : ""}.`}
+                >
+                  {money(value)}
+                </Note>
               </div>
             </div>
           }
@@ -71,9 +74,17 @@ export default async function PipelinePage({ searchParams }) {
           title="After a reply"
           note="Where replies go next in the selected range. The dark part of each bar moved on to the next stage; the light part stopped here, for the reason named on the right. Meetings, held and qualified come from HubSpot."
           right={
-            <span className="font-mono text-[11px] text-faint">
-              {perThousand(f) != null ? `${perThousand(f).toFixed(1)} meetings per 1,000 contacted` : "no contacts in range"} · plan {PER_THOUSAND_PLAN[0]} to {PER_THOUSAND_PLAN[1]}
-            </span>
+            perThousand(f) != null ? (
+              <span className="text-[13px] text-ink">
+                <Note
+                  align="right"
+                  width={240}
+                  text={`Meetings booked per 1,000 contacted. Plan ${PER_THOUSAND_PLAN[0]} to ${PER_THOUSAND_PLAN[1]}.`}
+                >
+                  {perThousand(f).toFixed(1)} per 1,000
+                </Note>
+              </span>
+            ) : null
           }
         >
           <Flow steps={flow(f)} />
@@ -102,8 +113,9 @@ export default async function PipelinePage({ searchParams }) {
             ].map(([label, v, sub, tone]) => (
               <div key={label} className="border-b border-r border-hair px-6 py-5">
                 <div className="text-[14px] text-ink">{label}</div>
-                <div className={`display mt-3 text-[30px] leading-none ${tone}`}>{fmt(v)}</div>
-                <div className="mt-2 font-mono text-[11px] text-faint">{sub}</div>
+                <div className={`display mt-3 text-[30px] leading-none ${tone}`}>
+                  <Note text={sub} width={220}>{fmt(v)}</Note>
+                </div>
               </div>
             ))}
           </div>
@@ -167,15 +179,17 @@ export default async function PipelinePage({ searchParams }) {
                     <Td>
                       <span className="flex items-center gap-2 text-ink">
                         <span className="h-2 w-2 rounded-[2px]" style={{ background: CHANNELS[key].color }} />
-                        {CHANNELS[key].label}
-                        <span className="text-[11px] text-faint">{CHANNELS[key].tool}</span>
+                        <Note text={`From ${CHANNELS[key].tool}.`} width={160}>{CHANNELS[key].label}</Note>
                       </span>
                     </Td>
                     <Td align="center" className="text-text">{fmt(x.contacted)}</Td>
                     <Td align="center" className="text-text">{fmt(x.replied)}</Td>
                     <Td align="center" className="text-text">
-                      {pct(rr, 1)}
-                      {key === "linkedin" ? <span className="block text-[11px] text-faint">of accepted</span> : null}
+                      {key === "linkedin" ? (
+                        <Note text="Replies over accepted connections." width={200}>{pct(rr, 1)}</Note>
+                      ) : (
+                        pct(rr, 1)
+                      )}
                     </Td>
                     <Td align="center" className="text-text">{fmt(x.positive)}</Td>
                     <Td align="center" className="text-text">{pct(rate(x.positive, x.replied))}</Td>

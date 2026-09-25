@@ -27,7 +27,15 @@ export default function Funnel({ f, extra }) {
     const through = over ? null : raw;
     const bench = BENCH[s.key];
     const low = through != null && bench != null && through < bench * 0.75;
-    return { ...s, value: f[s.key], through, bench, low, over, first: i === 0, empty: i > 0 && !prev };
+    const sub =
+      i === 0
+        ? "Top of the funnel."
+        : over
+          ? "The stage before is not counted yet."
+          : !prev
+            ? "Nothing in the stage before."
+            : `${pct(through, through < 0.1 ? 1 : 0)} of the stage before.`;
+    return { ...s, value: f[s.key], through, bench, low, sub };
   });
 
   return (
@@ -40,7 +48,9 @@ export default function Funnel({ f, extra }) {
             <Note text={c.how} width={260}>{c.label}</Note>
           </div>
           <div className={`display mt-5 text-[28px] leading-none ${c.low ? "text-warn" : "text-ink"}`}>
-            {fmt(c.value)}
+            <Note width={220} text={[c.sub, c.bench != null ? `Plan ${pct(c.bench)}.` : null].filter(Boolean).join(" ")}>
+              {fmt(c.value)}
+            </Note>
           </div>
           <div className="mt-4 h-[3px] w-full bg-surface-2">
             {c.through != null ? (
@@ -53,16 +63,7 @@ export default function Funnel({ f, extra }) {
               />
             ) : null}
           </div>
-          <div className="mt-2.5 font-mono text-[11px] text-faint">
-            {c.first
-              ? "top of funnel"
-              : c.over
-                ? "previous stage not counted yet"
-                : c.empty
-                  ? "nothing in the stage before"
-                  : `${pct(c.through, c.through < 0.1 ? 1 : 0)} of previous`}
-            {c.bench != null ? <span className="block">plan {pct(c.bench)}</span> : null}
-          </div>
+
         </div>
       ))}
       {extra}

@@ -1,5 +1,5 @@
-import { Note } from "./UI";
 import { fmt, pct } from "../lib/derive";
+import { Note } from "./UI";
 
 // What happens after a reply, the part of Gonz's prototype drawn as a
 // Sankey. Here each step is one hairline row: the bar is everyone who
@@ -12,10 +12,9 @@ export default function Flow({ steps }) {
       {steps.map((s) => (
         <div key={s.to} className="grid gap-3 py-4 md:grid-cols-[170px_1fr] md:items-center">
           <div>
-            <div className="h-row">{s.keptLabel}</div>
-            <div className="font-mono text-[11px] text-faint">
-              {s.rate != null ? `${pct(s.rate)} of ${fmt(s.total)}` : "nothing to count yet"}
-            </div>
+            <Note width={200} text={s.rate != null ? `${pct(s.rate)} of ${fmt(s.total)} moved on.` : "Nothing to count yet."}>
+              <span className="h-row">{s.keptLabel}</span>
+            </Note>
           </div>
           <div>
             <div className="flex h-[22px] w-full overflow-hidden bg-surface-2">
