@@ -3,6 +3,7 @@ import { Shell, PageHead, Panel, Th, Td, Badge, Note } from "../../components/UI
 import Controls, { readControls } from "../../components/Controls";
 import SourceBanner from "../../components/SourceBanner";
 import { Columns } from "../../components/Charts";
+import PeriodTable from "../../components/PeriodTable";
 import { dataset } from "../../lib/model";
 import { CHANNELS, signalByKey } from "../../lib/data/signals";
 import { prepare, windowFor, funnel, series, byCampaign, fmt, pct, rate } from "../../lib/derive";
@@ -47,11 +48,17 @@ export default async function LinkedInPage({ searchParams }) {
                   <Th align="center">
                     <Note text="Plan benchmark about 27%." width={200}>Acceptance</Note>
                   </Th>
+                  <Th align="center">
+                    <Note text="First messages sent after a connection was accepted. The weekly doc calls this connections messaged." width={240}>Messaged</Note>
+                  </Th>
                   <Th align="center">Replies</Th>
                   <Th align="center">
                     <Note text="Replies over accepted connections. Plan benchmark about 9%." width={220}>Reply rate</Note>
                   </Th>
                   <Th align="center">Positive</Th>
+                  <Th align="center">
+                    <Note text="Positive replies over accepted connections. Plan benchmark 2 to 4%." width={220} align="right">Positive of accepted</Note>
+                  </Th>
                 </tr>
               </thead>
               <tbody className="rows">
@@ -65,9 +72,11 @@ export default async function LinkedInPage({ searchParams }) {
                       <Td align="center" className="text-text">{fmt(x.connectionsSent)}</Td>
                       <Td align="center" className="text-text">{fmt(x.connectionsAccepted)}</Td>
                       <Td align="center" className={acc != null && acc < 0.2 ? "text-warn" : "text-text"}>{pct(acc)}</Td>
+                      <Td align="center" className="text-text">{fmt(x.messaged)}</Td>
                       <Td align="center" className="text-text">{fmt(x.replied)}</Td>
                       <Td align="center" className={rr != null && rr < 0.06 ? "text-warn" : "text-text"}>{pct(rr, 1)}</Td>
                       <Td align="center" className="text-text">{fmt(x.positive)}</Td>
+                      <Td align="center" className="text-text">{pct(rate(x.positive, x.connectionsAccepted), 1)}</Td>
                     </tr>
                   );
                 })}
@@ -82,6 +91,20 @@ export default async function LinkedInPage({ searchParams }) {
             <Columns title="Accepted" total={fmt(f.connectionsAccepted)} color={COLOR} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.connectionsAccepted }))} />
             <Columns title="Replies" total={fmt(f.replied)} color={COLOR} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.replied }))} />
           </div>
+        </Panel>
+
+        <Panel className="mt-12" title="Week by week" flush>
+          <PeriodTable
+            rows={s}
+            cols={[
+              { label: "Requests", value: (r) => fmt(r.connectionsSent) },
+              { label: "Accepted", value: (r) => fmt(r.connectionsAccepted) },
+              { label: "Acceptance", value: (r) => pct(rate(r.connectionsAccepted, r.connectionsSent)) },
+              { label: "Messaged", value: (r) => fmt(r.messaged) },
+              { label: "Replies", value: (r) => fmt(r.replied) },
+              { label: "Positive", value: (r) => fmt(r.positive) },
+            ]}
+          />
         </Panel>
 
         <Panel className="mt-12 mb-32" title="Campaigns" flush>

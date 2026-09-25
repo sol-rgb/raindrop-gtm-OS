@@ -44,13 +44,13 @@ export default async function SignalsPage({ searchParams }) {
                   {/* Fixed widths, so the columns line up from one tier's
                       table to the next and the page reads as one table. */}
                   <colgroup>
-                    <col style={{ width: "19%" }} />
-                    <col style={{ width: "11%" }} />
-                    {[0, 1, 2, 3, 4, 5].map((i) => (
-                      <col key={i} style={{ width: "7.5%" }} />
+                    <col style={{ width: "18%" }} />
+                    <col style={{ width: "10%" }} />
+                    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                      <col key={i} style={{ width: "6.8%" }} />
                     ))}
                     <col style={{ width: "10%" }} />
-                    <col style={{ width: "15%" }} />
+                    <col style={{ width: "14.4%" }} />
                   </colgroup>
                   <thead>
                     <tr className="border-b border-hair">
@@ -62,6 +62,11 @@ export default async function SignalsPage({ searchParams }) {
                       <Th align="center">Positive</Th>
                       <Th align="center">Booked</Th>
                       <Th align="center">Held</Th>
+                      <Th align="center">
+                        <Note text="Meetings booked per 1,000 contacted. Plan 2.4 to 4.8." width={220} align="right">
+                          Per 1,000
+                        </Note>
+                      </Th>
                       <Th align="center">
                         <Note text="Meetings held a week in this window, against what the plan expects a week. One-off lists carry a total instead." width={260} align="right">
                           Held a week
@@ -77,7 +82,10 @@ export default async function SignalsPage({ searchParams }) {
                         <tr key={r.key} className="lift-row border-b border-hair">
                           <Td>
                             <Link href={`/signals/${r.key}?range=${range}`} className="block">
-                              <span className="h-row">{r.name}</span>
+                              <span className="flex flex-wrap items-center gap-2">
+                                <span className="h-row">{r.name}</span>
+                                <Badge tone={r.status.tone}>{r.status.label}</Badge>
+                              </span>
                               <span className="mt-0.5 block max-w-[260px] truncate text-[11.5px] text-faint">
                                 {r.campaigns.length
                                   ? `${r.campaigns.length} campaign${r.campaigns.length > 1 ? "s" : ""}`
@@ -105,6 +113,9 @@ export default async function SignalsPage({ searchParams }) {
                           <Td align="center" className="text-text">{fmt(r.funnel.positive)}</Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.booked)}</Td>
                           <Td align="center" className="text-ink">{fmt(r.funnel.held)}</Td>
+                          <Td align="center" className={r.perThousand != null && r.perThousand < 2.4 && r.funnel.contacted > 200 ? "text-warn" : "text-text"}>
+                            {r.perThousand != null ? r.perThousand.toFixed(1) : "\u2013"}
+                          </Td>
                           <Td align="center">
                             {r.expectedTotal ? (
                               <span className="text-[12px] text-muted">{r.expectedTotal}</span>
@@ -116,9 +127,7 @@ export default async function SignalsPage({ searchParams }) {
                             )}
                           </Td>
                           <Td>
-                            {!r.campaigns.length && r.key !== "unmapped" ? (
-                              <Badge tone="warn">not live</Badge>
-                            ) : r.key === "unmapped" ? (
+                            {r.key === "unmapped" ? (
                               <Badge tone="bad">rename</Badge>
                             ) : (
                               <span className="block max-w-[220px] text-[12px] leading-snug text-muted">{r.next}</span>

@@ -79,6 +79,7 @@ export default async function RepliesPage({ searchParams }) {
                   <tr className="border-b border-hair">
                     <Th>Lead</Th>
                     <Th>Said</Th>
+                    <Th>Read</Th>
                     <Th>Signal</Th>
                     <Th>Owner</Th>
                     <Th align="center">Waiting</Th>
@@ -99,7 +100,11 @@ export default async function RepliesPage({ searchParams }) {
                       </Td>
                       <Td>
                         <span className="line-clamp-2 block max-w-[380px] text-[12.5px] leading-snug text-text">{t.snippet}</span>
-                        {t.positive ? <span className="mt-1.5 inline-block"><Badge tone="good">interested</Badge></span> : null}
+                      </Td>
+                      <Td>
+                        <Badge tone={t.positive ? "good" : /meeting/.test(t.status ?? "") ? "accent" : "default"}>
+                          {t.positive && !/interested/.test(t.status ?? "") ? "interested" : t.status ?? "unlabelled"}
+                        </Badge>
                       </Td>
                       <Td className="text-[12px] text-muted">{signalByKey(t.signal)?.name ?? "Unmapped"}</Td>
                       <Td className="text-text">{t.owner ?? "Unassigned"}</Td>

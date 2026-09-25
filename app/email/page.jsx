@@ -3,6 +3,7 @@ import { Shell, PageHead, Panel, Th, Td, Badge, Note } from "../../components/UI
 import Controls, { readControls } from "../../components/Controls";
 import SourceBanner from "../../components/SourceBanner";
 import { Columns } from "../../components/Charts";
+import PeriodTable from "../../components/PeriodTable";
 import { dataset } from "../../lib/model";
 import { CHANNELS, signalByKey } from "../../lib/data/signals";
 import { prepare, windowFor, funnel, series, byCampaign, fmt, pct, rate } from "../../lib/derive";
@@ -71,6 +72,20 @@ export default async function EmailPage({ searchParams }) {
             <Columns title="Replies" total={fmt(f.replied)} color={COLOR} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.replied }))} />
             <Columns title="Positive" total={fmt(f.positive)} color={COLOR} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.positive }))} />
           </div>
+        </Panel>
+
+        <Panel className="mt-12" title="Week by week" flush>
+          <PeriodTable
+            rows={s}
+            cols={[
+              { label: "Sent", value: (r) => fmt(r.sent) },
+              { label: "New contacted", value: (r) => fmt(r.contacted) },
+              { label: "Replies", value: (r) => fmt(r.replied) },
+              { label: "Reply rate", value: (r) => pct(rate(r.replied, r.contacted), 1) },
+              { label: "Positive", value: (r) => fmt(r.positive) },
+              { label: "Positive of replies", value: (r) => pct(rate(r.positive, r.replied)) },
+            ]}
+          />
         </Panel>
 
         <Panel className="mt-12 mb-32" title="Campaigns" flush>

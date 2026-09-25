@@ -3,12 +3,13 @@ import { Shell, PageHead, Panel, Th, Td, Badge, Note } from "../components/UI";
 import Controls, { readControls } from "../components/Controls";
 import SourceBanner from "../components/SourceBanner";
 import Funnel from "../components/Funnel";
+import Flow from "../components/Flow";
 import { Columns, Paired } from "../components/Charts";
 import { dataset } from "../lib/model";
 import { cfg } from "../lib/config";
 import { CHANNELS } from "../lib/data/signals";
 import {
-  prepare, windowFor, funnel, series, pipelineValue, rate, fmt, pct, money, mondayOf,
+  prepare, windowFor, funnel, series, pipelineValue, rate, fmt, pct, money, mondayOf, flow, perThousand, PER_THOUSAND_PLAN,
 } from "../lib/derive";
 
 export const dynamic = "force-dynamic";
@@ -64,6 +65,19 @@ export default async function PipelinePage({ searchParams }) {
             </div>
           }
         />
+
+        <Panel
+          className="mt-16"
+          title="After a reply"
+          note="Where replies go next in the selected range. The dark part of each bar moved on to the next stage; the light part stopped here, for the reason named on the right. Meetings, held and qualified come from HubSpot."
+          right={
+            <span className="font-mono text-[11px] text-faint">
+              {perThousand(f) != null ? `${perThousand(f).toFixed(1)} meetings per 1,000 contacted` : "no contacts in range"} · plan {PER_THOUSAND_PLAN[0]} to {PER_THOUSAND_PLAN[1]}
+            </span>
+          }
+        >
+          <Flow steps={flow(f)} />
+        </Panel>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_320px]">
           <Panel

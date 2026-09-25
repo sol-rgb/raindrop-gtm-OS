@@ -95,3 +95,6 @@ console.log("adapter selftest ok");
 assert.equal(signalFor({ name: "AI 60-Day Announce - ZK Copy B" }), "agent-launch");
 assert.equal(signalFor({ name: "AI announcement in the last 60 days A version" }), "agent-launch");
 console.log("live-name selftest ok");
+import { flow } from "../lib/derive.js";
+for (const s of flow(f)) assert.equal(s.kept + s.dropped, s.total, `flow ${s.to}: kept + dropped = reached`);
+console.log("flow selftest ok");
