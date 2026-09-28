@@ -97,6 +97,9 @@ export default async function EmailPage({ searchParams }) {
                   <Th>Campaign</Th>
                   <Th>Signal</Th>
                   <Th>Status</Th>
+                  <Th align="center">
+                    <Note text="Leads in the campaign right now, as Instantly reports it." width={200}>Leads</Note>
+                  </Th>
                   <Th align="center">Contacted</Th>
                   <Th align="center">Sent</Th>
                   <Th align="center">Replies</Th>
@@ -119,6 +122,7 @@ export default async function EmailPage({ searchParams }) {
                       )}
                     </Td>
                     <Td><Badge tone={c.status === "active" ? "good" : "default"}>{c.status}</Badge></Td>
+                    <Td align="center" className="text-text">{fmt(c.leadsTotal)}</Td>
                     <Td align="center" className="text-text">{fmt(c.contacted)}</Td>
                     <Td align="center" className="text-text">{fmt(c.sent)}</Td>
                     <Td align="center" className="text-text">{fmt(c.replied)}</Td>

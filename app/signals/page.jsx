@@ -59,7 +59,7 @@ export default async function SignalsPage({ searchParams }) {
                     <tr className="border-b border-hair">
                       <Th>Signal</Th>
                       <Th>Channel</Th>
-                      <Th align="center" className="!px-1.5">Entered</Th>
+                      <Th align="center" className="!px-1.5">Loaded</Th>
                       <Th align="center" className="!px-1.5">Contacted</Th>
                       <Th align="center" className="!px-1.5">Replied</Th>
                       <Th align="center" className="!px-1.5">Positive</Th>

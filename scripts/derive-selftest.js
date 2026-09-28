@@ -104,3 +104,8 @@ assert.ok(upd.startsWith("Hey team"), "update opens casually");
 assert.ok(!/—|–| - /.test(upd), "no dashes between words in the update");
 assert.ok(upd.length < 1400, "update stays short");
 console.log("comms selftest ok");
+// Leads loaded: signals and channels each add back up to the total.
+assert.ok(f.entered > 0, "seed loads leads into campaigns");
+assert.equal(s.reduce((n, x) => n + x.funnel.entered, 0), f.entered, "signals sum to total loaded");
+assert.equal(e.entered + l.entered, f.entered, "email + linkedin = total loaded");
+console.log("leads-loaded selftest ok");

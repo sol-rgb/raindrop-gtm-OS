@@ -88,11 +88,11 @@ export default async function SignalPage({ params, searchParams }) {
                 <dd className="body-text mt-1">{sig.next ?? "None"}</dd>
               </div>
               <div>
-                <dt className="h-field">Leads from Clay in this window</dt>
+                <dt className="h-field">Leads loaded in this window</dt>
                 <dd className="body-text mt-1">
                   {f.entered
-                    ? `${fmt(f.entered)} row${f.entered === 1 ? "" : "s"} sent by the HTTP column.`
-                    : "None yet. The HTTP column on this signal's Clay table is what fills this in."}
+                    ? `${fmt(f.entered)} lead${f.entered === 1 ? "" : "s"} added to this signal's campaigns in Instantly and HeyReach.`
+                    : "None in this window."}
                 </dd>
               </div>
             </dl>

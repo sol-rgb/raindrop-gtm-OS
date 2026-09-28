@@ -115,6 +115,9 @@ export default async function LinkedInPage({ searchParams }) {
                   <Th>Campaign</Th>
                   <Th>Signal</Th>
                   <Th>Status</Th>
+                  <Th align="center">
+                    <Note text="Leads in the campaign right now, as HeyReach reports it." width={200}>Leads</Note>
+                  </Th>
                   <Th align="center">Requests</Th>
                   <Th align="center">Accepted</Th>
                   <Th align="center">Replies</Th>
@@ -140,6 +143,7 @@ export default async function LinkedInPage({ searchParams }) {
                       )}
                     </Td>
                     <Td><Badge tone={c.status === "active" || c.status === "in progress" ? "good" : "default"}>{c.status}</Badge></Td>
+                    <Td align="center" className="text-text">{fmt(c.leadsTotal)}</Td>
                     <Td align="center" className="text-text">{fmt(c.connectionsSent)}</Td>
                     <Td align="center" className="text-text">{fmt(c.connectionsAccepted)}</Td>
                     <Td align="center" className="text-text">{fmt(c.replied)}</Td>
