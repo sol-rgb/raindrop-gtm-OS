@@ -64,15 +64,14 @@ export default async function SignalsPage({ searchParams }) {
                       <Th align="center" className="!px-1.5">Replied</Th>
                       <Th align="center" className="!px-1.5">Positive</Th>
                       <Th align="center" className="!px-1.5">Booked</Th>
-                      <Th align="center" className="!px-1.5">Held</Th>
                       <Th align="center" className="!px-1.5">
                         <Note text="Meetings booked per 1,000 contacted. Plan 2.4 to 4.8." width={220} align="right">
                           Per 1,000
                         </Note>
                       </Th>
                       <Th align="center" className="!px-1.5">
-                        <Note text="Meetings held a week in this window, against what the plan expects a week. One-off lists carry a total instead." width={260} align="right">
-                          Held a week
+                        <Note text="Meetings booked a week in this window, against what the plan expects a week. One-off lists carry a total instead." width={260} align="right">
+                          Booked a week
                         </Note>
                       </Th>
                       <Th>Next</Th>
@@ -80,7 +79,7 @@ export default async function SignalsPage({ searchParams }) {
                   </thead>
                   <tbody className="rows">
                     {g.rows.map((r) => {
-                      const behind = r.expectedPerWeek > 0 && r.heldPerWeek < r.expectedPerWeek * 0.5;
+                      const behind = r.expectedPerWeek > 0 && r.bookedPerWeek < r.expectedPerWeek * 0.5;
                       return (
                         <tr key={r.key} className="lift-row border-b border-hair">
                           <Td>
@@ -125,7 +124,6 @@ export default async function SignalsPage({ searchParams }) {
                           </Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.positive)}</Td>
                           <Td align="center" className="text-text">{fmt(r.funnel.booked)}</Td>
-                          <Td align="center" className="text-ink">{fmt(r.funnel.held)}</Td>
                           <Td align="center" className={r.perThousand != null && r.perThousand < 2.4 && r.funnel.contacted > 200 ? "text-warn" : "text-text"}>
                             {r.perThousand != null ? r.perThousand.toFixed(1) : "\u2013"}
                           </Td>
@@ -134,7 +132,7 @@ export default async function SignalsPage({ searchParams }) {
                               <span className="text-[12px] text-muted">{r.expectedTotal}</span>
                             ) : (
                               <span className={behind ? "text-warn" : "text-text"}>
-                                {r.heldPerWeek.toFixed(1)}
+                                {r.bookedPerWeek.toFixed(1)}
                                 <span className="text-faint"> / {r.expectedPerWeek}</span>
                               </span>
                             )}

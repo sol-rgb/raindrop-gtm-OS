@@ -73,7 +73,7 @@ export default async function SignalPage({ params, searchParams }) {
           <Panel title="Over time">
             <div className="grid gap-10">
               <Columns title="Contacted" total={fmt(f.contacted)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.contacted }))} height={100} />
-              <Columns title="Meetings held" total={fmt(f.held)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.held }))} color="#4b7d88" height={100} />
+              <Columns title="Meetings booked" total={fmt(f.booked)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.booked }))} color="#4b7d88" height={100} />
             </div>
           </Panel>
 

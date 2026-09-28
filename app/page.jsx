@@ -26,7 +26,7 @@ export default async function PipelinePage({ searchParams }) {
   const s = series(p, w, grain);
   const value = pipelineValue(f, c.estimatedAcv);
 
-  // This week against the plan's fifteen held, counted Monday to now.
+  // This week against the plan's fifteen a week, counted Monday to now.
   const now = Date.now();
   const thisWeek = funnel(p, { from: mondayOf(now), to: now + 1 });
   const weekly = series(p, windowFor("all"), "week");
@@ -40,7 +40,7 @@ export default async function PipelinePage({ searchParams }) {
       <Shell>
         <PageHead
           title="Pipeline."
-          sub="Where outbound turns into pipeline: leads Clay qualified, who we contacted, who replied, who was positive, meetings booked and held, and what qualified."
+          sub="Where outbound turns into pipeline: leads Clay qualified, who we contacted, who replied, who was positive, meetings booked, and what qualified."
         >
           <Controls path="/" sp={sp} range={range} grain={grain} />
         </PageHead>
@@ -72,7 +72,7 @@ export default async function PipelinePage({ searchParams }) {
         <Panel
           className="mt-16"
           title="After a reply"
-          note="Where replies go next in the selected range. The dark part of each bar moved on to the next stage; the light part stopped here, for the reason named on the right. Meetings, held and qualified come from HubSpot."
+          note="Where replies go next in the selected range. The dark part of each bar moved on to the next stage; the light part stopped here, for the reason named on the right. Meetings and qualified come from HubSpot."
           right={
             perThousand(f) != null ? (
               <span className="text-[13px] text-ink">
@@ -93,11 +93,11 @@ export default async function PipelinePage({ searchParams }) {
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_320px]">
           <Panel
             title="Against the plan"
-            note={`The plan asks for ${c.goalMeetingsPerWeek} discovery calls held a week. Each column is one week since sends began on Aug 17.`}
+            note={`The plan asks for ${c.goalMeetingsPerWeek} discovery calls a week, counted here as meetings booked. Each column is one week since sends began on Aug 17.`}
           >
             <Columns
-              title="Meetings held, by week"
-              data={weekly.map((b) => ({ label: b.label, sub: b.sub, value: b.held }))}
+              title="Meetings booked, by week"
+              data={weekly.map((b) => ({ label: b.label, sub: b.sub, value: b.booked }))}
               goal={c.goalMeetingsPerWeek}
               goalLabel={`plan ${c.goalMeetingsPerWeek} a week`}
               color="#4b7d88"
@@ -107,8 +107,8 @@ export default async function PipelinePage({ searchParams }) {
 
           <div className="grid border-l border-t border-hair bg-surface">
             {[
-              ["Held this week", thisWeek.held, `of ${c.goalMeetingsPerWeek} planned`, thisWeek.held >= c.goalMeetingsPerWeek ? "text-good" : "text-ink"],
-              ["Booked this week", thisWeek.booked, "created in HubSpot since Monday", "text-ink"],
+              ["Booked this week", thisWeek.booked, `created in HubSpot since Monday, of ${c.goalMeetingsPerWeek} planned`, thisWeek.booked >= c.goalMeetingsPerWeek ? "text-good" : "text-ink"],
+              ["Replied this week", thisWeek.replied, "email and LinkedIn replies", "text-ink"],
               ["Positive this week", thisWeek.positive, "replies marked interested", "text-ink"],
             ].map(([label, v, sub, tone]) => (
               <div key={label} className="border-b border-r border-hair px-6 py-5">
@@ -131,7 +131,6 @@ export default async function PipelinePage({ searchParams }) {
             <Columns title="Replies" total={fmt(f.replied)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.replied }))} />
             <Columns title="Positive" total={fmt(f.positive)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.positive }))} />
             <Columns title="Meetings booked" total={fmt(f.booked)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.booked }))} />
-            <Columns title="Meetings held" total={fmt(f.held)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.held }))} color="#4b7d88" />
             <Columns title="Qualified" total={fmt(f.qualified)} data={s.map((b) => ({ label: b.label, sub: b.sub, value: b.qualified }))} color="#4b7d88" />
           </div>
         </Panel>
