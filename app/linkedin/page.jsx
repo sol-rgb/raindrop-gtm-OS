@@ -39,7 +39,7 @@ export default async function LinkedInPage({ searchParams }) {
 
         <Panel title="By sender" flush>
           <div className="scroll-box overflow-x-auto lg:overflow-visible">
-            <table className="w-full min-w-[760px] border-collapse">
+            <table className="w-full min-w-[860px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">
                   <Th>Sender</Th>
@@ -50,6 +50,9 @@ export default async function LinkedInPage({ searchParams }) {
                   </Th>
                   <Th align="center">
                     <Note text="First messages sent after a connection was accepted. The weekly doc calls this connections messaged." width={240}>Messaged</Note>
+                  </Th>
+                  <Th align="center">
+                    <Note text="Every LinkedIn message and InMail sent, follow-ups included." width={220}>Messages sent</Note>
                   </Th>
                   <Th align="center">Replies</Th>
                   <Th align="center">
@@ -73,6 +76,7 @@ export default async function LinkedInPage({ searchParams }) {
                       <Td align="center" className="text-text">{fmt(x.connectionsAccepted)}</Td>
                       <Td align="center" className={acc != null && acc < 0.2 ? "text-warn" : "text-text"}>{pct(acc)}</Td>
                       <Td align="center" className="text-text">{fmt(x.messaged)}</Td>
+                      <Td align="center" className="text-text">{fmt(x.sent)}</Td>
                       <Td align="center" className="text-text">{fmt(x.replied)}</Td>
                       <Td align="center" className={rr != null && rr < 0.06 ? "text-warn" : "text-text"}>{pct(rr, 1)}</Td>
                       <Td align="center" className="text-text">{fmt(x.positive)}</Td>
@@ -101,6 +105,7 @@ export default async function LinkedInPage({ searchParams }) {
               { label: "Accepted", value: (r) => fmt(r.connectionsAccepted) },
               { label: "Acceptance", value: (r) => pct(rate(r.connectionsAccepted, r.connectionsSent)) },
               { label: "Messaged", value: (r) => fmt(r.messaged) },
+              { label: "Messages sent", value: (r) => fmt(r.sent) },
               { label: "Replies", value: (r) => fmt(r.replied) },
               { label: "Positive", value: (r) => fmt(r.positive) },
             ]}
@@ -109,7 +114,7 @@ export default async function LinkedInPage({ searchParams }) {
 
         <Panel className="mt-12 mb-32" title="Campaigns" flush>
           <div className="scroll-box overflow-x-auto lg:overflow-visible">
-            <table className="w-full min-w-[860px] border-collapse">
+            <table className="w-full min-w-[1000px] border-collapse">
               <thead>
                 <tr className="border-b border-hair">
                   <Th>Campaign</Th>
@@ -120,6 +125,12 @@ export default async function LinkedInPage({ searchParams }) {
                   </Th>
                   <Th align="center">Requests</Th>
                   <Th align="center">Accepted</Th>
+                  <Th align="center">
+                    <Note text="First messages sent after a connection was accepted." width={220}>Messaged</Note>
+                  </Th>
+                  <Th align="center">
+                    <Note text="Every LinkedIn message and InMail sent, follow-ups included." width={220}>Messages sent</Note>
+                  </Th>
                   <Th align="center">Replies</Th>
                   <Th align="center">Reply rate</Th>
                   <Th align="center">Positive</Th>
@@ -146,6 +157,8 @@ export default async function LinkedInPage({ searchParams }) {
                     <Td align="center" className="text-text">{fmt(c.leadsTotal)}</Td>
                     <Td align="center" className="text-text">{fmt(c.connectionsSent)}</Td>
                     <Td align="center" className="text-text">{fmt(c.connectionsAccepted)}</Td>
+                    <Td align="center" className="text-text">{fmt(c.messaged)}</Td>
+                    <Td align="center" className="text-text">{fmt(c.sent)}</Td>
                     <Td align="center" className="text-text">{fmt(c.replied)}</Td>
                     <Td align="center" className="text-text">{pct(rate(c.replied, c.connectionsAccepted), 1)}</Td>
                     <Td align="center" className="text-text">{fmt(c.positive)}</Td>
