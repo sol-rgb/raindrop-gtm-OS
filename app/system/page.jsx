@@ -144,7 +144,9 @@ export default async function SystemPage() {
                   <span className="text-ink">{new Date(r.startedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT</span>
                   <span className="font-mono text-[11px] text-faint">{r.trigger}</span>
                   <span className="text-[12px] text-muted">
-                    {(r.detail?.results ?? []).map((x) => `${x.source} ${x.ok ? "ok" : "failed"}`).join(" · ")}
+                    {(r.detail?.results ?? [])
+                      .map((x) => `${x.source} ${x.ok ? "ok" : "failed"}${x.keptRequests ? ` (kept ${x.keptRequests} requests HeyReach dropped)` : ""}`)
+                      .join(" · ")}
                   </span>
                 </div>
               ))}

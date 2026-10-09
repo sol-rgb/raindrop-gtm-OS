@@ -109,3 +109,18 @@ assert.ok(f.entered > 0, "seed loads leads into campaigns");
 assert.equal(s.reduce((n, x) => n + x.funnel.entered, 0), f.entered, "signals sum to total loaded");
 assert.equal(e.entered + l.entered, f.entered, "email + linkedin = total loaded");
 console.log("leads-loaded selftest ok");
+// HeyReach lowering its own history must not erase stored past days.
+import { guardDaily } from "../lib/sync/guard.js";
+{
+  const row = (day, connectionsSent) => ({ source: "heyreach", campaignId: "1", day, connectionsSent, connectionsAccepted: 0, replied: 0, sent: 0 });
+  const stored = [row("2026-10-01", 40), row("2026-10-08", 10)];
+  const incoming = [row("2026-10-01", 0), row("2026-10-08", 6), row("2026-10-02", 5)];
+  const { rows, kept } = guardDaily(stored, incoming, "2026-10-08");
+  assert.equal(rows.find((r) => r.day === "2026-10-01").connectionsSent, 40, "a past day keeps the stored higher number");
+  assert.equal(rows.find((r) => r.day === "2026-10-08").connectionsSent, 6, "yesterday can still go down");
+  assert.equal(rows.find((r) => r.day === "2026-10-02").connectionsSent, 5, "a new day is written as is");
+  assert.equal(kept.connectionsSent, 40, "the kept amount is reported");
+  const up = guardDaily(stored, [row("2026-10-01", 55)], "2026-10-08");
+  assert.equal(up.rows[0].connectionsSent, 55, "a past day can still go up");
+}
+console.log("guard selftest ok");
