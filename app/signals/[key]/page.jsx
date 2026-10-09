@@ -128,7 +128,13 @@ export default async function SignalPage({ params, searchParams }) {
                       <Td align="center" className="text-text">{fmt(c.contacted)}</Td>
                       <Td align="center" className="text-text">{fmt(c.replied)}</Td>
                       <Td align="center" className="text-text">
-                        {pct(rate(c.replied, c.channel === "linkedin" ? c.connectionsAccepted : c.contacted), 1)}
+                        {c.channel === "linkedin" ? (
+                          <Note text={`${pct(rate(c.replied, c.connectionsAccepted), 1)} of accepted connections.`} width={200}>
+                            {pct(rate(c.replied, c.contacted), 1)}
+                          </Note>
+                        ) : (
+                          pct(rate(c.replied, c.contacted), 1)
+                        )}
                       </Td>
                       <Td align="center" className="text-text">{fmt(c.positive)}</Td>
                     </tr>

@@ -56,7 +56,7 @@ export default async function LinkedInPage({ searchParams }) {
                   </Th>
                   <Th align="center">Replies</Th>
                   <Th align="center">
-                    <Note text="Replies over accepted connections. Plan benchmark about 9%." width={220}>Reply rate</Note>
+                    <Note text="Replies over accepted connections, not over requests sent. Plan benchmark about 9%." width={220}>Reply rate of accepted</Note>
                   </Th>
                   <Th align="center">Positive</Th>
                   <Th align="center">
@@ -132,7 +132,9 @@ export default async function LinkedInPage({ searchParams }) {
                     <Note text="Every LinkedIn message and InMail sent, follow-ups included." width={220}>Messages sent</Note>
                   </Th>
                   <Th align="center">Replies</Th>
-                  <Th align="center">Reply rate</Th>
+                  <Th align="center">
+                    <Note text="Replies over accepted connections." width={200}>Reply rate of accepted</Note>
+                  </Th>
                   <Th align="center">Positive</Th>
                 </tr>
               </thead>

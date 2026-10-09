@@ -138,7 +138,7 @@ export default async function PipelinePage({ searchParams }) {
         <Panel
           className="mt-16 mb-32"
           title="By channel"
-          note="Contacted means a new lead emailed, or a LinkedIn connection request sent. Replies on LinkedIn are counted against accepted connections, because a request nobody accepted cannot be replied to."
+          note="Contacted means a new lead emailed, or a LinkedIn connection request sent. Reply rate is replies over contacted on both channels, so the two rows compare like for like. Hover the LinkedIn rate for replies over accepted connections."
           flush
         >
           <div className="px-6 pb-2 pt-6">
@@ -172,7 +172,7 @@ export default async function PipelinePage({ searchParams }) {
               <tbody className="rows">
                 {[
                   ["email", email, rate(email.replied, email.contacted), "/email"],
-                  ["linkedin", linkedin, rate(linkedin.replied, linkedin.connectionsAccepted), "/linkedin"],
+                  ["linkedin", linkedin, rate(linkedin.replied, linkedin.contacted), "/linkedin"],
                 ].map(([key, x, rr, href]) => (
                   <tr key={key} className="border-b border-hair">
                     <Td>
@@ -185,7 +185,7 @@ export default async function PipelinePage({ searchParams }) {
                     <Td align="center" className="text-text">{fmt(x.replied)}</Td>
                     <Td align="center" className="text-text">
                       {key === "linkedin" ? (
-                        <Note text="Replies over accepted connections." width={200}>{pct(rr, 1)}</Note>
+                        <Note text={`${pct(rate(x.replied, x.connectionsAccepted), 1)} of accepted connections.`} width={200}>{pct(rr, 1)}</Note>
                       ) : (
                         pct(rr, 1)
                       )}
